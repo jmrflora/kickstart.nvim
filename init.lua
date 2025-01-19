@@ -91,7 +91,7 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = false
+vim.g.have_nerd_font = true
 
 -- [[ Setting options ]]
 -- See `:help vim.opt`
@@ -102,7 +102,7 @@ vim.g.have_nerd_font = false
 vim.opt.number = true
 -- You can also add relative line numbers, to help with jumping.
 --  Experiment for yourself to see if you like it!
--- vim.opt.relativenumber = true
+vim.opt.relativenumber = true
 
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = 'a'
@@ -872,10 +872,29 @@ require('lazy').setup({
 
       -- Add/delete/replace surroundings (brackets, quotes, etc.)
       --
-      -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
+      -- - aiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
       -- - sd'   - [S]urround [D]elete [']quotes
       -- - sr)'  - [S]urround [R]eplace [)] [']
-      require('mini.surround').setup()
+      --
+      -- Set timeout to 2000ms
+      require('mini.surround').setup {
+        mappings = {
+          add = 'gsa', -- Add surrounding in Normal and Visual modes
+          --e.g. gsaiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
+          --e.g. gsaa}) - [S]urround [A]dd [A]round [}]Braces [)]Paren
+          delete = 'gsd', -- Delete surrounding
+          --e.g.    gsd"   - [S]urround [D]elete ["]quotes
+          replace = 'gsr', -- Replace surrounding
+          --e.g.     gsr)'  - [S]urround [R]eplace [)]Paren by [']quote
+          find = 'gsf', -- Find surrounding (to the right)
+          find_left = 'gsF', -- Find surrounding (to the left)
+          highlight = 'gsh', -- Highlight surrounding
+          update_n_lines = 'gsn', -- Update `n_lines`
+        },
+        n_lines = 500,
+      }
+      vim.keymap.set('', 's', 'l', { desc = 'Move cursor right' })
+      -- require('mini.surround').setup()
 
       -- Simple and easy statusline.
       --  You could remove this setup call if you don't like it,
